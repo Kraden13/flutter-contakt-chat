@@ -21,7 +21,7 @@ class GreenButton extends StatelessWidget {
           ))),
       elevation: 2,
       highlightElevation: 5,
-      color: Color(0xffAFEA97),
+      color: Color(0xffAAEA61),
       shape: StadiumBorder(),
       onPressed: this.onPressed,
     );
