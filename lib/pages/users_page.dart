@@ -1,5 +1,7 @@
+import 'package:chat_contakt/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_contakt/models/user.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class UsersPage extends StatefulWidget {
@@ -21,9 +23,15 @@ class _UsersPageState extends State<UsersPage> {
       RefreshController(initialRefresh: false);
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+    final user = authService.user;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cristian'),
+        title: Text(
+          user.name,
+          style: TextStyle(color: Colors.black),
+        ),
         elevation: 1,
         backgroundColor: Colors.white,
         leading: IconButton(
@@ -31,7 +39,10 @@ class _UsersPageState extends State<UsersPage> {
               Icons.exit_to_app,
               color: Colors.black,
             ),
-            onPressed: () {}),
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, 'login');
+              AuthService.deleteToken();
+            }),
         actions: [Icon(Icons.check_circle)],
       ),
       body: SmartRefresher(

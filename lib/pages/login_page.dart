@@ -1,8 +1,11 @@
+import 'package:chat_contakt/helpers/show_alert.dart';
+import 'package:chat_contakt/services/auth_service.dart';
 import 'package:chat_contakt/widgets/custom_input.dart';
 import 'package:chat_contakt/widgets/green_button.dart';
 import 'package:chat_contakt/widgets/header.dart';
 import 'package:chat_contakt/widgets/labels.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -43,6 +46,7 @@ class __FormState extends State<_Form> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
     return Container(
       margin: EdgeInsets.only(top: 30),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -60,7 +64,21 @@ class __FormState extends State<_Form> {
             controller: passwordCntrl,
             isPassword: true,
           ),
-          GreenButton('Ingresar', () {}),
+          GreenButton(
+              'Ingresar',
+              (authService.auth)
+                  ? null
+                  : () async {
+                      FocusScope.of(context).unfocus();
+                      final loginOk = await authService.login(
+                          emailCntrl.text.trim(), passwordCntrl.text.trim());
+                      if (loginOk) {
+                        Navigator.pushReplacementNamed(context, 'users');
+                      } else {
+                        showAlert(context, 'Login Incorrecto',
+                            'Compruebe sus credenciales');
+                      }
+                    }),
         ],
       ),
     );
