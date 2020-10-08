@@ -1,5 +1,6 @@
 import 'package:chat_contakt/helpers/show_alert.dart';
 import 'package:chat_contakt/services/auth_service.dart';
+import 'package:chat_contakt/services/socket_service.dart';
 import 'package:chat_contakt/widgets/custom_input.dart';
 import 'package:chat_contakt/widgets/green_button.dart';
 import 'package:chat_contakt/widgets/header.dart';
@@ -47,6 +48,7 @@ class __FormState extends State<_Form> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
     return Container(
       margin: EdgeInsets.only(top: 0),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -81,6 +83,7 @@ class __FormState extends State<_Form> {
                           passwordCntrl.text.trim());
 
                       if (registerOk) {
+                        socketService.connect();
                         Navigator.pushReplacementNamed(context, 'users');
                       } else {
                         showAlert(context, 'Registro Incorrecto', registerOk);
